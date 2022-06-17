@@ -107,11 +107,25 @@ validation_errors as (
     select
         {{fk_columns_csv}}
     from fk_table
-    where ( {{fk_columns_csv}} )
-        not in (
-            select {{pk_columns_csv}}
-            from pk_table
-        )
+    left join pk_table
+    on 
+    {% for column in fk_columns_list -%}
+        fk_table.{{column}} = pk_table.{{column}}
+        {%- if not loop.last -%}
+            and
+        {%- endif -%}
+    {% endfor %}
+    where 
+    
+    pk_table.property_key is null
+    {% for column in fk_columns_list -%}
+        (pk_table.{{column}} is null
+        and
+        fk_table.{{column}} is not null)
+        {%- if not loop.last -%}
+           and
+        {%- endif -%}
+    {% endfor %}
 )
 select *
 from validation_errors
