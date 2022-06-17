@@ -7,7 +7,7 @@ config-version: 2
 # and has been tested with dbt >=1.0.0
 require-dbt-version: ">=1.0.0"
 
-profile: 'dbt_constraints'
+profile: dbt_constraints
 
 # All tests and macros in this packages are found in the macro path
 macro-paths: ["macros"]
