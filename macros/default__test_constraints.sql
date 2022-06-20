@@ -110,18 +110,12 @@ validation_errors as (
     from fk_table
     left join pk_table
     on 
-    {# {% for column in fk_columns_list -%}  #}
     {% for fki in fk_columns_list %} 
-    {# {% set pki = pk_columns_list %} #}
-    {# {% for fki, pki in fk_pk_tuple_list -%}  #}
         fk_table.{{fki}} = pk_table.{{ pk_columns_list[loop.index0] }}
         {% if not loop.last %} and {% endif %}
     {% endfor %}
     where 
-    {# {% for column in fk_columns_list -%} #}
     {% for fki in fk_columns_list %}
-    {# {% for fki, pki in fk_pk_tuple_list -%}  #}
-        {# (pk_table.{{fki}} is null and fk_table.{{pki}} is not null) #}
         (fk_table.{{fki}} is null and pk_table.{{ pk_columns_list[loop.index0] }} is not null)
         {% if not loop.last %} and {% endif %}
     {% endfor %}
